@@ -1,37 +1,25 @@
-1. Resumen
+# Lab2Login 2.0 — Autenticación con Laravel Breeze
 
+## 1. Resumen
 Este proyecto implementa un flujo de autenticación listo para usar con Laravel Breeze, integrando vistas Blade y estilos con Tailwind. Incluye rutas protegidas, validación, persistencia de sesiones y estructura MVC clara para continuar el desarrollo del laboratorio.
 
-2. Tecnologías
+## 2. Tecnologías
+- PHP 8.2+
+- Laravel 12
+- MySQL (WAMP) o SQLite
+- Composer
+- Node.js y npm (Vite, Tailwind)
+- Git
 
-PHP 8.2+
+## 3. Requisitos previos
+- WAMP instalado y en ejecución (Apache y MySQL).
+- PHP CLI disponible en PATH.
+- Composer instalado.
+- Node.js 18+ y npm.
+- Git instalado.
 
-Laravel 12
-
-MySQL (WAMP) o SQLite
-
-Composer
-
-Node.js y npm (Vite, Tailwind)
-
-Git
-
-3. Requisitos previos
-
-WAMP instalado y en ejecución (Apache y MySQL).
-
-PHP CLI disponible en PATH.
-
-Composer instalado.
-
-Node.js 18+ y npm.
-
-Git instalado.
-
-4. Clonado del repositorio
-git clone https://github.com/Val233100/Lab2Login2.0.git
-cd Lab2Login2.0
-
+## 4. Clonado del repositorio
+```bash
 5. Dependencias PHP
 composer install
 
@@ -138,7 +126,6 @@ Panel autenticado: /dashboard
 Perfil: /profile
 
 12. Estructura del proyecto (MVC)
-
 Modelos
 
 app/Models/User.php: entidad de usuario (autenticación, notificaciones).
@@ -244,7 +231,7 @@ Causa: tablas existentes.
 Solución: php artisan migrate:status para revisar o php artisan migrate:fresh si se puede recrear.
 
 Sesiones en base de datos faltan
-Causa: SESSION_DRIVER=database sin tabla.
+Causa: SESSION_DRIVER=database sin tabla de sesiones.
 Solución: php artisan session:table && php artisan migrate.
 
 PowerShell bloquea npm o scripts
@@ -263,10 +250,3 @@ register.png: formulario de registro.
 dashboard.png: vista autenticada.
 
 profile.png: edición de perfil.
-
-Enlazar en el README si se desea:
-
-![Login](docs/capturas/login.png)
-![Register](docs/capturas/register.png)
-![Dashboard](docs/capturas/dashboard.png)
-![Profile](docs/capturas/profile.png)
