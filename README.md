@@ -1,61 +1,272 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+1. Resumen
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto implementa un flujo de autenticación listo para usar con Laravel Breeze, integrando vistas Blade y estilos con Tailwind. Incluye rutas protegidas, validación, persistencia de sesiones y estructura MVC clara para continuar el desarrollo del laboratorio.
 
-## About Laravel
+2. Tecnologías
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+PHP 8.2+
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Laravel 12
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+MySQL (WAMP) o SQLite
 
-## Learning Laravel
+Composer
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Node.js y npm (Vite, Tailwind)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Git
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Requisitos previos
 
-## Laravel Sponsors
+WAMP instalado y en ejecución (Apache y MySQL).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+PHP CLI disponible en PATH.
 
-### Premium Partners
+Composer instalado.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Node.js 18+ y npm.
 
-## Contributing
+Git instalado.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Clonado del repositorio
+git clone https://github.com/Val233100/Lab2Login2.0.git
+cd Lab2Login2.0
 
-## Code of Conduct
+5. Dependencias PHP
+composer install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Variables de entorno y clave de aplicación
 
-## Security Vulnerabilities
+Crear el archivo .env desde el ejemplo:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+copy .env.example .env
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Generar la clave de la aplicación:
+
+php artisan key:generate
+
+7. Configuración de base de datos
+7.1 Opción A: MySQL (recomendada en WAMP)
+
+Crear una base de datos en phpMyAdmin con nombre lab2login y cotejamiento utf8mb4_unicode_ci.
+
+Configurar .env:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=lab2login
+DB_USERNAME=root
+DB_PASSWORD=
+
+
+Si se utilizará sesión en base de datos:
+
+SESSION_DRIVER=database
+
+
+Luego generar la tabla de sesiones:
+
+php artisan session:table
+
+7.2 Opción B: SQLite
+
+Crear el archivo de base de datos:
+
+type NUL > database\database.sqlite
+
+
+Configurar .env:
+
+DB_CONNECTION=sqlite
+
+
+Para sesiones en base de datos:
+
+php artisan session:table
+
+8. Migraciones
+php artisan migrate
+
+8.1 Nota sobre longitudes de índice (MySQL error 1071)
+
+En entornos MySQL con límites de índice, establecer la longitud por defecto en app/Providers/AppServiceProvider.php:
+
+use Illuminate\Support\Facades\Schema;
+
+public function boot(): void
+{
+    Schema::defaultStringLength(191);
+}
+
+9. Dependencias frontend y assets
+
+Instalar dependencias:
+
+npm install
+
+
+Modo desarrollo (Vite):
+
+npm run dev
+
+
+Vite servirá assets en http://localhost:5173.
+
+Compilación para producción:
+
+npm run build
+
+10. Servidor de desarrollo de Laravel
+
+Ubicarse en la carpeta del proyecto y ejecutar:
+
+php artisan serve
+
+
+La aplicación quedará disponible en http://localhost:8000.
+
+11. Rutas relevantes
+
+Registro: /register
+
+Inicio de sesión: /login
+
+Panel autenticado: /dashboard
+
+Perfil: /profile
+
+12. Estructura del proyecto (MVC)
+
+Modelos
+
+app/Models/User.php: entidad de usuario (autenticación, notificaciones).
+
+Vistas (Blade)
+
+Autenticación: resources/views/auth/*
+
+Layouts: resources/views/layouts/*
+
+Dashboard: resources/views/dashboard.blade.php
+
+Controladores
+
+Autenticación: app/Http/Controllers/Auth/*
+
+Perfil: app/Http/Controllers/ProfileController.php
+
+Rutas
+
+Públicas y autenticación: routes/auth.php
+
+Web y rutas protegidas: routes/web.php
+
+Migraciones
+
+database/migrations/*: usuarios, caché, jobs y (opcional) sesiones.
+
+Middlewares
+
+auth: restringe acceso a usuarios autenticados.
+
+guest: restringe a invitados (por ejemplo, páginas de login/register).
+
+verified (si se habilita verificación de email).
+
+13. Comandos útiles
+php artisan route:list
+php artisan migrate:status
+php artisan migrate:fresh      # recrea todas las tablas
+php artisan tinker
+php artisan cache:clear
+php artisan config:clear
+
+14. Resultado esperado
+
+Acceso a /register para crear cuenta.
+
+Acceso a /login para iniciar sesión.
+
+Redirección a /dashboard al autenticarse.
+
+Edición de perfil en /profile.
+
+15. Integración con WAMP (Apache)
+
+Opción alternativa a php artisan serve: configurar un VirtualHost apuntando al directorio public/ del proyecto.
+
+Ejemplo (httpd-vhosts.conf):
+
+<VirtualHost *:80>
+    ServerName lab2login.local
+    DocumentRoot "C:/wamp64/www/Lab2Login/public"
+    <Directory "C:/wamp64/www/Lab2Login/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+
+Luego editar hosts:
+
+127.0.0.1  lab2login.local
+
+16. Buenas prácticas
+
+No versionar .env ni storage/* (ya contemplado en .gitignore).
+
+Ejecutar composer install y npm install después de clonar.
+
+Usar migraciones en lugar de crear tablas manualmente.
+
+Mantener APP_DEBUG=false en producción.
+
+Validar entradas en controladores y requests.
+
+17. Solución de problemas
+
+vendor/autoload.php no existe
+Causa: no se han instalado dependencias.
+Solución: composer install dentro del directorio del proyecto.
+
+Could not open input file: artisan
+Causa: ejecutando el comando fuera del proyecto.
+Solución: ubicarse en la carpeta del proyecto antes de ejecutar.
+
+Specified key was too long; max key length is 1000 bytes (1071)
+Causa: límites de índice en MySQL.
+Solución: Schema::defaultStringLength(191) en AppServiceProvider y repetir migraciones.
+
+Base table or view already exists durante migraciones
+Causa: tablas existentes.
+Solución: php artisan migrate:status para revisar o php artisan migrate:fresh si se puede recrear.
+
+Sesiones en base de datos faltan
+Causa: SESSION_DRIVER=database sin tabla.
+Solución: php artisan session:table && php artisan migrate.
+
+PowerShell bloquea npm o scripts
+Solución:
+
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+
+18. Capturas de pantalla
+
+Colocar evidencias en docs/capturas/:
+
+login.png: pantalla de inicio de sesión.
+
+register.png: formulario de registro.
+
+dashboard.png: vista autenticada.
+
+profile.png: edición de perfil.
+
+Enlazar en el README si se desea:
+
+![Login](docs/capturas/login.png)
+![Register](docs/capturas/register.png)
+![Dashboard](docs/capturas/dashboard.png)
+![Profile](docs/capturas/profile.png)
