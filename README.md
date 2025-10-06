@@ -1,186 +1,143 @@
-##Lab2Login 2.0 — Autenticación con Laravel Breeze
-Resumen
+# Lab2Login 2.0 — Autenticación con Laravel Breeze
+
+## Resumen
 
 Este proyecto implementa un flujo de autenticación listo para usar con Laravel Breeze, integrando vistas Blade y estilos con Tailwind. Incluye rutas protegidas, validación, persistencia de sesiones y una estructura MVC clara para continuar el desarrollo del laboratorio.
 
-Tecnologías
+## Tecnologías
 
-PHP 8.2+
+*   PHP 8.2+
+*   Laravel 12
+*   MySQL (WAMP) o SQLite
+*   Composer
+*   Node.js y npm (Vite, Tailwind)
+*   Git
 
-Laravel 12
+## Requisitos previos
 
-MySQL (WAMP) o SQLite
+*   WAMP instalado y en ejecución (Apache y MySQL).
+*   PHP CLI disponible en PATH.
+*   Composer instalado.
+*   Node.js 18+ y npm.
+*   Git instalado.
 
-Composer
+## Instalación
 
-Node.js y npm (Vite, Tailwind)
+### Clonado del repositorio
 
-Git
-
-Requisitos previos
-
-WAMP instalado y en ejecución (Apache y MySQL).
-
-PHP CLI disponible en PATH.
-
-Composer instalado.
-
-Node.js 18+ y npm.
-
-Git instalado.
-
-Clonado del repositorio
 git clone https://github.com/Val233100/Lab2Login2.0.git
 cd Lab2Login2.0
 
-Dependencias PHP
+### Dependencias PHP
+
 composer install
 
-Variables de entorno y clave de aplicación
+### Variables de entorno y clave de aplicación
 
-Crear el archivo .env desde el ejemplo:
+1.  Crear el archivo .env desde el ejemplo:
+    copy .env.example .env
+2.  Generar la clave de la aplicación:
+    php artisan key:generate
 
-copy .env.example .env
+### Configuración de base de datos
 
+#### Opción A: MySQL (recomendada con WAMP)
 
-Generar la clave de la aplicación:
+1.  Crear una base de datos en phpMyAdmin con nombre lab2login y cotejamiento utf8mb4_unicode_ci.
+2.  Configurar el archivo .env:
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=lab2login
+    DB_USERNAME=root
+    DB_PASSWORD=
+3.  Opcional (sesiones en base de datos):
+    SESSION_DRIVER=database
+4.  Generar la tabla de sesiones si usas SESSION_DRIVER=database:
+    php artisan session:table
 
-php artisan key:generate
+#### Opción B: SQLite
 
-Configuración de base de datos
-Opción A: MySQL (recomendada con WAMP)
+1.  Crear el archivo de base de datos:
+    type NUL > database\database.sqlite
+2.  Configurar .env:
+    DB_CONNECTION=sqlite
+3.  Opcional (sesiones en base de datos):
+    php artisan session:table
 
-Crear una base de datos en phpMyAdmin con nombre lab2login y cotejamiento utf8mb4_unicode_ci.
+### Migraciones
 
-Configurar el archivo .env:
+Ejecuta las migraciones para crear las tablas en la base de datos:
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=lab2login
-DB_USERNAME=root
-DB_PASSWORD=
-
-
-Opcional (sesiones en base de datos):
-
-SESSION_DRIVER=database
-
-
-Generar la tabla de sesiones si usas SESSION_DRIVER=database:
-
-php artisan session:table
-
-Opción B: SQLite
-
-Crear el archivo de base de datos:
-
-type NUL > database\database.sqlite
-
-
-Configurar .env:
-
-DB_CONNECTION=sqlite
-
-
-Opcional (sesiones en base de datos):
-
-php artisan session:table
-
-Migraciones
 php artisan migrate
 
 Nota: error 1071 (longitudes de índice en MySQL)
-
 Si aparece Specified key was too long; max key length is 1000 bytes, establece la longitud por defecto en app/Providers/AppServiceProvider.php:
-
 use Illuminate\Support\Facades\Schema;
-
 public function boot(): void
 {
     Schema::defaultStringLength(191);
 }
-
-
 Luego recrea las tablas si es necesario:
-
 php artisan migrate:fresh
 
-Dependencias frontend y assets
+### Dependencias frontend y assets
 
-Instalar dependencias:
+1.  Instalar dependencias:
+    npm install
+2.  Modo desarrollo (Vite):
+    npm run dev
+    Vite servirá los assets en http://localhost:5173.
+3.  Compilación para producción:
+    npm run build
 
-npm install
-
-
-Modo desarrollo (Vite):
-
-npm run dev
-
-
-Vite servirá assets en http://localhost:5173.
-
-Compilación para producción:
-
-npm run build
-
-Servidor de desarrollo de Laravel
+### Servidor de desarrollo de Laravel
 
 Ejecutar el servidor de Laravel:
-
 php artisan serve
-
-
 La aplicación quedará disponible en http://localhost:8000.
 
-Rutas relevantes
+## Rutas relevantes
 
-Registro: /register
+*   Registro: /register
+*   Inicio de sesión: /login
+*   Panel autenticado: /dashboard
+*   Perfil: /profile
 
-Inicio de sesión: /login
+## Estructura del proyecto (MVC)
 
-Panel autenticado: /dashboard
+### Modelos
 
-Perfil: /profile
+*   app/Models/User.php: entidad de usuario (autenticación, notificaciones).
 
-Estructura del proyecto (MVC)
-Modelos
+### Vistas (Blade)
 
-app/Models/User.php: entidad de usuario (autenticación, notificaciones).
+*   Autenticación: resources/views/auth/*
+*   Layouts: resources/views/layouts/*
+*   Dashboard: resources/views/dashboard.blade.php
 
-Vistas (Blade)
+### Controladores
 
-Autenticación: resources/views/auth/*
+*   Autenticación: app/Http/Controllers/Auth/*
+*   Perfil: app/Http/Controllers/ProfileController.php
 
-Layouts: resources/views/layouts/*
+### Rutas
 
-Dashboard: resources/views/dashboard.blade.php
+*   Públicas y autenticación: routes/auth.php
+*   Web y rutas protegidas: routes/web.php
 
-Controladores
+### Migraciones
 
-Autenticación: app/Http/Controllers/Auth/*
+*   database/migrations/*: usuarios, caché, jobs y (opcional) sesiones.
 
-Perfil: app/Http/Controllers/ProfileController.php
+### Middlewares
 
-Rutas
+*   auth: restringe acceso a usuarios autenticados.
+*   guest: restringe a invitados (login/register).
+*   verified: para verificación de email si se habilita.
 
-Públicas y autenticación: routes/auth.php
+## Comandos útiles
 
-Web y rutas protegidas: routes/web.php
-
-Migraciones
-
-database/migrations/*: usuarios, caché, jobs y (opcional) sesiones.
-
-Middlewares
-
-auth: restringe acceso a usuarios autenticados.
-
-guest: restringe a invitados (login/register).
-
-verified: para verificación de email si se habilita.
-
-Comandos útiles
 php artisan route:list
 php artisan migrate:status
 php artisan migrate:fresh
@@ -188,22 +145,18 @@ php artisan tinker
 php artisan cache:clear
 php artisan config:clear
 
-Resultado esperado
+## Resultado esperado
 
-Acceso a /register para crear cuenta.
+*   Acceso a /register para crear cuenta.
+*   Acceso a /login para iniciar sesión.
+*   Redirección a /dashboard al autenticarse.
+*   Edición de perfil en /profile.
 
-Acceso a /login para iniciar sesión.
+## Integración con WAMP (Apache)
 
-Redirección a /dashboard al autenticarse.
-
-Edición de perfil en /profile.
-
-Integración con WAMP (Apache)
-
-Alternativa a php artisan serve: configurar un VirtualHost que apunte a public/.
+Alternativa a php artisan serve: configurar un VirtualHost que apunte a la carpeta public/.
 
 Ejemplo (httpd-vhosts.conf):
-
 <VirtualHost *:80>
     ServerName lab2login.local
     DocumentRoot "C:/wamp64/www/Lab2Login/public"
@@ -213,61 +166,46 @@ Ejemplo (httpd-vhosts.conf):
     </Directory>
 </VirtualHost>
 
-
 Editar el archivo hosts:
-
 127.0.0.1  lab2login.local
-
 
 Asegúrate de tener habilitado mod_rewrite y AllowOverride All para que .htaccess funcione correctamente.
 
-Buenas prácticas
+## Buenas prácticas
 
-No versionar .env ni storage/* (ya contemplado en .gitignore).
+*   No versionar .env ni storage/* (ya contemplado en .gitignore).
+*   Ejecutar composer install y npm install después de clonar.
+*   Usar migraciones en lugar de crear tablas manualmente.
+*   Mantener APP_DEBUG=false en producción.
+*   Validar entradas con Form Requests y reglas en controladores.
 
-Ejecutar composer install y npm install después de clonar.
+## Solución de problemas
 
-Usar migraciones en lugar de crear tablas manualmente.
+*   vendor/autoload.php no existe
+    *   Causa: no se han instalado dependencias.
+    *   Solución: ejecutar composer install dentro del directorio del proyecto.
+*   Could not open input file: artisan
+    *   Causa: ejecutando el comando fuera del proyecto.
+    *   Solución: ubicarse en la carpeta del proyecto (debe existir el archivo artisan).
+*   Specified key was too long; max key length is 1000 bytes (1071)
+    *   Causa: límites de índice en MySQL.
+    *   Solución: Schema::defaultStringLength(191) en AppServiceProvider y php artisan migrate:fresh.
+*   Base table or view already exists en migraciones
+    *   Causa: tablas existentes.
+    *   Solución: revisar con php artisan migrate:status o recrear con php artisan migrate:fresh.
+*   Sesiones en base de datos faltan
+    *   Causa: SESSION_DRIVER=database sin tabla.
+    *   Solución: php artisan session:table && php artisan migrate.
+*   PowerShell bloquea npm o scripts
+    *   Solución:
+        Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
-Mantener APP_DEBUG=false en producción.
-
-Validar entradas con Form Requests y reglas en controladores.
-
-Solución de problemas
-
-vendor/autoload.php no existe
-Causa: no se han instalado dependencias.
-Solución: ejecutar composer install dentro del directorio del proyecto.
-
-Could not open input file: artisan
-Causa: ejecutando el comando fuera del proyecto.
-Solución: ubicarse en la carpeta del proyecto (debe existir el archivo artisan).
-
-Specified key was too long; max key length is 1000 bytes (1071)
-Causa: límites de índice en MySQL.
-Solución: Schema::defaultStringLength(191) en AppServiceProvider y php artisan migrate:fresh.
-
-Base table or view already exists en migraciones
-Causa: tablas existentes.
-Solución: revisar con php artisan migrate:status o recrear con php artisan migrate:fresh.
-
-Sesiones en base de datos faltan
-Causa: SESSION_DRIVER=database sin tabla.
-Solución: php artisan session:table && php artisan migrate.
-
-PowerShell bloquea npm o scripts
-Solución:
-
-Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-
-Capturas de pantalla
+## Capturas de pantalla
 
 Colocar evidencias en docs/capturas/:
 
-login.png: pantalla de inicio de sesión.
+*   login.png: pantalla de inicio de sesión.
+*   register.png: formulario de registro.
+*   dashboard.png: vista autenticada.
+*   profile.png: edición de perfil.
 
-register.png: formulario de registro.
-
-dashboard.png: vista autenticada.
-
-profile.png: edición de perfil.
