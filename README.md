@@ -1,4 +1,4 @@
-Lab2Login 2.0 — Autenticación con Laravel Breeze
+##Lab2Login 2.0 — Autenticación con Laravel Breeze
 Resumen
 
 Este proyecto implementa un flujo de autenticación listo para usar con Laravel Breeze, integrando vistas Blade y estilos con Tailwind. Incluye rutas protegidas, validación, persistencia de sesiones y una estructura MVC clara para continuar el desarrollo del laboratorio.
