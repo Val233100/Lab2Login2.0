@@ -1,9 +1,9 @@
 Lab2Login 2.0 — Autenticación con Laravel Breeze
-1. Resumen
+Resumen
 
-Este proyecto implementa un flujo de autenticación listo para usar con Laravel Breeze, integrando vistas Blade y estilos con Tailwind. Incluye rutas protegidas, validación, persistencia de sesiones y estructura MVC clara para continuar el desarrollo del laboratorio.
+Este proyecto implementa un flujo de autenticación listo para usar con Laravel Breeze, integrando vistas Blade y estilos con Tailwind. Incluye rutas protegidas, validación, persistencia de sesiones y una estructura MVC clara para continuar el desarrollo del laboratorio.
 
-2. Tecnologías
+Tecnologías
 
 PHP 8.2+
 
@@ -17,7 +17,7 @@ Node.js y npm (Vite, Tailwind)
 
 Git
 
-3. Requisitos previos
+Requisitos previos
 
 WAMP instalado y en ejecución (Apache y MySQL).
 
@@ -29,14 +29,14 @@ Node.js 18+ y npm.
 
 Git instalado.
 
-4. Clonado del repositorio
+Clonado del repositorio
 git clone https://github.com/Val233100/Lab2Login2.0.git
 cd Lab2Login2.0
 
-5. Dependencias PHP
+Dependencias PHP
 composer install
 
-6. Variables de entorno y clave de aplicación
+Variables de entorno y clave de aplicación
 
 Crear el archivo .env desde el ejemplo:
 
@@ -47,12 +47,12 @@ Generar la clave de la aplicación:
 
 php artisan key:generate
 
-7. Configuración de base de datos
-7.1 Opción A: MySQL (recomendada en WAMP)
+Configuración de base de datos
+Opción A: MySQL (recomendada con WAMP)
 
 Crear una base de datos en phpMyAdmin con nombre lab2login y cotejamiento utf8mb4_unicode_ci.
 
-Configurar .env:
+Configurar el archivo .env:
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -62,16 +62,16 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 
-Si se utilizará sesión en base de datos:
+Opcional (sesiones en base de datos):
 
 SESSION_DRIVER=database
 
 
-Luego generar la tabla de sesiones:
+Generar la tabla de sesiones si usas SESSION_DRIVER=database:
 
 php artisan session:table
 
-7.2 Opción B: SQLite
+Opción B: SQLite
 
 Crear el archivo de base de datos:
 
@@ -83,16 +83,16 @@ Configurar .env:
 DB_CONNECTION=sqlite
 
 
-Para sesiones en base de datos:
+Opcional (sesiones en base de datos):
 
 php artisan session:table
 
-8. Migraciones
+Migraciones
 php artisan migrate
 
-8.1 Nota sobre longitudes de índice (MySQL error 1071)
+Nota: error 1071 (longitudes de índice en MySQL)
 
-En entornos MySQL con límites de índice, establecer la longitud por defecto en app/Providers/AppServiceProvider.php:
+Si aparece Specified key was too long; max key length is 1000 bytes, establece la longitud por defecto en app/Providers/AppServiceProvider.php:
 
 use Illuminate\Support\Facades\Schema;
 
@@ -102,11 +102,11 @@ public function boot(): void
 }
 
 
-Después de ese cambio, vuelve a ejecutar:
+Luego recrea las tablas si es necesario:
 
 php artisan migrate:fresh
 
-9. Dependencias frontend y assets
+Dependencias frontend y assets
 
 Instalar dependencias:
 
@@ -124,16 +124,16 @@ Compilación para producción:
 
 npm run build
 
-10. Servidor de desarrollo de Laravel
+Servidor de desarrollo de Laravel
 
-Ubicarse en la carpeta del proyecto y ejecutar:
+Ejecutar el servidor de Laravel:
 
 php artisan serve
 
 
 La aplicación quedará disponible en http://localhost:8000.
 
-11. Rutas relevantes
+Rutas relevantes
 
 Registro: /register
 
@@ -143,7 +143,7 @@ Panel autenticado: /dashboard
 
 Perfil: /profile
 
-12. Estructura del proyecto (MVC)
+Estructura del proyecto (MVC)
 Modelos
 
 app/Models/User.php: entidad de usuario (autenticación, notificaciones).
@@ -176,19 +176,19 @@ Middlewares
 
 auth: restringe acceso a usuarios autenticados.
 
-guest: restringe a invitados (por ejemplo, páginas de login/register).
+guest: restringe a invitados (login/register).
 
-verified (si se habilita verificación de email).
+verified: para verificación de email si se habilita.
 
-13. Comandos útiles
+Comandos útiles
 php artisan route:list
 php artisan migrate:status
-php artisan migrate:fresh      # recrea todas las tablas
+php artisan migrate:fresh
 php artisan tinker
 php artisan cache:clear
 php artisan config:clear
 
-14. Resultado esperado
+Resultado esperado
 
 Acceso a /register para crear cuenta.
 
@@ -198,9 +198,9 @@ Redirección a /dashboard al autenticarse.
 
 Edición de perfil en /profile.
 
-15. Integración con WAMP (Apache)
+Integración con WAMP (Apache)
 
-Opción alternativa a php artisan serve: configurar un VirtualHost apuntando al directorio public/ del proyecto.
+Alternativa a php artisan serve: configurar un VirtualHost que apunte a public/.
 
 Ejemplo (httpd-vhosts.conf):
 
@@ -214,14 +214,14 @@ Ejemplo (httpd-vhosts.conf):
 </VirtualHost>
 
 
-Luego editar hosts:
+Editar el archivo hosts:
 
 127.0.0.1  lab2login.local
 
 
-Asegúrate de tener habilitado mod_rewrite y de que AllowOverride All permita a Laravel usar .htaccess.
+Asegúrate de tener habilitado mod_rewrite y AllowOverride All para que .htaccess funcione correctamente.
 
-16. Buenas prácticas
+Buenas prácticas
 
 No versionar .env ni storage/* (ya contemplado en .gitignore).
 
@@ -231,28 +231,28 @@ Usar migraciones en lugar de crear tablas manualmente.
 
 Mantener APP_DEBUG=false en producción.
 
-Validar entradas en controladores y requests.
+Validar entradas con Form Requests y reglas en controladores.
 
-17. Solución de problemas
+Solución de problemas
 
 vendor/autoload.php no existe
 Causa: no se han instalado dependencias.
-Solución: composer install dentro del directorio del proyecto.
+Solución: ejecutar composer install dentro del directorio del proyecto.
 
 Could not open input file: artisan
 Causa: ejecutando el comando fuera del proyecto.
-Solución: ubicarse en la carpeta del proyecto antes de ejecutar.
+Solución: ubicarse en la carpeta del proyecto (debe existir el archivo artisan).
 
 Specified key was too long; max key length is 1000 bytes (1071)
 Causa: límites de índice en MySQL.
-Solución: Schema::defaultStringLength(191) en AppServiceProvider y repetir migraciones con migrate:fresh.
+Solución: Schema::defaultStringLength(191) en AppServiceProvider y php artisan migrate:fresh.
 
-Base table or view already exists durante migraciones
+Base table or view already exists en migraciones
 Causa: tablas existentes.
-Solución: php artisan migrate:status para revisar o php artisan migrate:fresh si se puede recrear.
+Solución: revisar con php artisan migrate:status o recrear con php artisan migrate:fresh.
 
 Sesiones en base de datos faltan
-Causa: SESSION_DRIVER=database sin tabla de sesiones.
+Causa: SESSION_DRIVER=database sin tabla.
 Solución: php artisan session:table && php artisan migrate.
 
 PowerShell bloquea npm o scripts
@@ -260,7 +260,7 @@ Solución:
 
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
-18. Capturas de pantalla
+Capturas de pantalla
 
 Colocar evidencias en docs/capturas/:
 
